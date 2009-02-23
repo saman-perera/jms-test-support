@@ -11,6 +11,24 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring</artifactId>
+			<version>2.5.6</version>
+		</dependency> 
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>2.5.6</version>
+		</dependency> 
+	
+		<dependency>
 			<groupId>org.apache.activemq</groupId>
 			<artifactId>activemq-core</artifactId>
 			<version>5.2.0</version>
@@ -46,7 +64,7 @@
 		</dependency>
 
 		<!-- WebSphere MQ -->
-		<dependency>
+		<!-- >dependency>
 			<groupId>com.ibm.mq</groupId>
 			<artifactId>com.ibm.mq</artifactId>
 			<version>6.0.2.4</version>
@@ -84,9 +102,9 @@
 			<groupId>org.apache.geronimo.specs</groupId>
 			<artifactId>geronimo-jta_1.1_spec</artifactId>
 			<version>1.1.1</version>
-		</dependency>
+		</dependency-->
 		
-		<dependency>
+		<!-- dependency>
 			<groupId>com.sun.jndi</groupId>
 			<artifactId>providerutil</artifactId>
 			<version>1.2</version>
@@ -95,37 +113,13 @@
 			<groupId>com.sun.jndi</groupId>
 			<artifactId>fscontext</artifactId>
 			<version>1.2-beta-3</version>
-		</dependency>
+		</dependency-->
 		
-		<dependency>
+		<!-- dependency>
 			<groupId>net.java.dev.mq</groupId>
 			<artifactId>openmq</artifactId>
 			<version>4.2</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>commons-pool</groupId>
-			<artifactId>commons-pool</artifactId>
-			<version>1.4</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.4</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring</artifactId>
-			<version>2.5.6</version>
-		</dependency> 
-		
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<version>2.5.6</version>
-		</dependency> 
+		</dependency-->
 	</dependencies>
 
 	<build>
