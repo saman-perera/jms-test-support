@@ -17,12 +17,14 @@ package sk.seges.test.jms;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite.SuiteClasses;
+import org.springframework.test.context.ContextConfiguration;
 
 /**
  * @author ladislav.gazo
  */
 @RunWith(SpringJMSSuite.class)
 @SuiteClasses({DummyFirstTest.class, DummySecondTest.class})
+@ContextConfiguration(locations = {"/test-context.xml"})
 @SpringProviderConfiguration(managersListName = "jmsSuiteTestManagers")
 public class MockedSpringProvidersSuiteTest {
 }
