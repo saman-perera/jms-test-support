@@ -10,6 +10,7 @@ import org.springframework.test.context.ContextConfiguration;
 import sk.seges.test.jms.manager.JMSProviderManager;
 
 public class SpringJMSSuite extends JMSSuite {
+	private static final String JMS_PROVIDER_MANAGERS = "jmsProviderManagers";
 	private ApplicationContext context;
 	
 	public SpringJMSSuite(Class<?> klass, Class<?>[] annotatedClasses)
@@ -35,7 +36,7 @@ public class SpringJMSSuite extends JMSSuite {
 		if(providerConfiguration != null) {
 			managers = (List<JMSProviderManager>) context.getBean(providerConfiguration.managersListName());	
 		} else {
-			managers = (List<JMSProviderManager>) context.getBean("managers");
+			managers = (List<JMSProviderManager>) context.getBean(JMS_PROVIDER_MANAGERS);
 		}
 	}
 
