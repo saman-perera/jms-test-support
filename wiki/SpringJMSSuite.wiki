@@ -26,6 +26,12 @@ Now we want to define which test cases have to be run within the suite with anno
 @SuiteClasses({DummyFirstTest.class, DummySecondTest.class})
 }}}
 
+Spring support uses Spring Test framework facilities and for the suite applies {{{ @ContextConfiguration }}} annotation specifically. Default context file name is _context.xml_. When we need to define another location of Spring context file on class path we use the annotation in the standard manner:
+
+{{{
+@ContextConfiguration(locations = {"/test-context.xml"})
+}}}
+
 We need to instruct JMS test suite which provider manager it has to use. Because we are trying to do everything in Spring we have defined the list of managers with _jmsSuiteTestManagers_ ID.
 
 The suite expects a bean with default ID _jmsProviderManagers_. To define something else we use {{{ @SpringProviderConfiguration }}} annotation.
@@ -33,3 +39,5 @@ The suite expects a bean with default ID _jmsProviderManagers_. To define someth
 {{{
 @SpringProviderConfiguration(managersListName = "jmsSuiteTestManagers")
 }}}
+
+And that's it! One suite with at most 4 annotations ;)
