@@ -1,4 +1,4 @@
-package sk.seges.test.jms;
+package sk.seges.test.jms.manager;
 
 public interface JMSProviderManager {
     void start();
