@@ -17,6 +17,8 @@ package sk.seges.test.jms;
 
 import java.util.List;
 
+import javax.naming.Context;
+
 import org.apache.log4j.Logger;
 import org.junit.internal.runners.InitializationError;
 import org.junit.runner.Description;
@@ -43,6 +45,7 @@ import sk.seges.test.jms.manager.JMSProviderManager;
 public abstract class JMSSuite extends Suite {
 	private static final Logger log = Logger.getLogger(JMSSuite.class);
 	protected List<JMSProviderManager> managers;
+	protected Context jndiContext;
 
 	protected boolean restartAfterEachTest = false;
 	
@@ -53,12 +56,14 @@ public abstract class JMSSuite extends Suite {
 		super(klass, annotatedClasses);
 		configure(klass);
 		setManagers(klass);
+		setJNDIContext();
 	}
 
 	public JMSSuite(Class<?> klass) throws InitializationError {
 		super(klass);
 		configure(klass);
 		setManagers(klass);
+		setJNDIContext();
 	}
 
 	private void configure(Class<?> klass) {
@@ -120,6 +125,7 @@ public abstract class JMSSuite extends Suite {
 		});
 		
 		for (JMSProviderManager manager : managers) {
+			rebindJNDI(manager);
 			manager.start();
 			currentRunning = manager;
 			if(log.isInfoEnabled()) {
@@ -141,4 +147,8 @@ public abstract class JMSSuite extends Suite {
 	 * @param klass A class that is run with this suite (where the annotation RunWith is put).
 	 */
 	protected abstract void setManagers(Class<?> klass);
+	
+	protected abstract void setJNDIContext();
+	
+	protected abstract void rebindJNDI(JMSProviderManager manager);
 }

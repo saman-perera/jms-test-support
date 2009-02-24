@@ -20,12 +20,7 @@ limitations under the License.
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
 
-	<bean id="embeddedActiveMQBroker" class="org.apache.activemq.xbean.BrokerFactoryBean" lazy-init="true" scope="prototype">
-		<property name="config" value="classpath:/sk/seges/test/jms/activemq/embedded-activemq.xml" />
-	</bean>
-	
-	<!-- List of only one embedded ActiveMQ provider manager -->
-	<bean id="onlyEmbeddedActiveMQManager" lazy-init="true" class="org.springframework.beans.factory.config.ListFactoryBean">
+	<bean id="testManagers" lazy-init="true" class="org.springframework.beans.factory.config.ListFactoryBean">
 		<property name="sourceList">
 			<list>
 				<bean class="sk.seges.test.jms.manager.EmbeddedActiveMQProviderManager">
@@ -34,13 +29,5 @@ limitations under the License.
 				</bean>
 			</list>
 		</property>
-	</bean>
-	
-	<bean id="embeddedActiveMQTestConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
-		<property name="brokerURL" value="tcp://localhost:61617" />
-	</bean>
-	
-	<bean id="embeddedActiveMQTestQueueA" class="org.apache.activemq.command.ActiveMQQueue">
-		<constructor-arg value="testQueueA" />
 	</bean>
 </beans>

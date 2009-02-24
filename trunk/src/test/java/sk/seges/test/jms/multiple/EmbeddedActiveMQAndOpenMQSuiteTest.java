@@ -13,27 +13,21 @@
  * See the License for the specific language governing permissions and 
  * limitations under the License. 
  */
-package sk.seges.test.jms.mock;
+package sk.seges.test.jms.multiple;
 
-import sk.seges.test.jms.manager.JMSProviderManager;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite.SuiteClasses;
+import org.springframework.test.context.ContextConfiguration;
+
+import sk.seges.test.jms.SpringJMSSuite;
+import sk.seges.test.jms.SpringProviderConfiguration;
 
 /**
  * @author ladislav.gazo
  */
-public class ReportingJMSProviderManager implements JMSProviderManager {
-	public void restart() {
-		System.out.println("restart");
-	}
-
-	public void start() {
-		System.out.println("start");
-	}
-
-	public void stop() {
-		System.out.println("stop");
-	}
-
-	public String getId() {
-		return "reportingManager";
-	}
+@RunWith(SpringJMSSuite.class)
+@SuiteClasses({QueueSendReceiveTest.class})
+@ContextConfiguration(locations = {"/sk/seges/test/jms/multiple/test-multiple-context.xml", "/sk/seges/test/jms/jts-context.xml", "/sk/seges/test/jms/activemq/jts-context-activemq.xml"})
+@SpringProviderConfiguration(managersListName = "testManagers")
+public class EmbeddedActiveMQAndOpenMQSuiteTest {
 }

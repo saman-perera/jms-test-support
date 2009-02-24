@@ -17,9 +17,12 @@ package sk.seges.test.jms;
 
 import java.util.List;
 
+import javax.naming.NamingException;
+
 import org.junit.internal.runners.InitializationError;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.jndi.JndiTemplate;
 import org.springframework.test.context.ContextConfiguration;
 
 import sk.seges.test.jms.manager.JMSProviderManager;
@@ -68,6 +71,29 @@ public class SpringJMSSuite extends JMSSuite {
 		} else {
 			managers = (List<JMSProviderManager>) context
 					.getBean(JMS_PROVIDER_MANAGERS);
+		}
+	}
+
+	@Override
+	protected void setJNDIContext() {
+		JndiTemplate template = (JndiTemplate) context.getBean("jndiCtx");
+		try {
+			jndiContext = template.getContext();
+		} catch (NamingException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
+	protected void rebindJNDI(JMSProviderManager manager) {
+		String tmp;
+		try {
+			tmp = manager.getId() + "TestConnectionFactory";
+			jndiContext.rebind(tmp, context.getBean(tmp));
+			tmp = manager.getId() + "TestQueueA";
+			jndiContext.rebind(tmp, context.getBean(tmp));			
+		} catch (Exception e) {
+			throw new RuntimeException(e);
 		}
 	}
 }
