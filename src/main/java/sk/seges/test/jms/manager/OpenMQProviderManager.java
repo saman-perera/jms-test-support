@@ -21,7 +21,7 @@ package sk.seges.test.jms.manager;
  * 
  * @author ladislav.gazo
  */
-public class OpenMQJMSProviderManager implements JMSProviderManager {
+public class OpenMQProviderManager implements JMSProviderManager {
 	public void restart() {
 	}
 
@@ -29,5 +29,9 @@ public class OpenMQJMSProviderManager implements JMSProviderManager {
 	}
 
 	public void stop() {
+	}
+
+	public String getId() {
+		return "openMQ";
 	}
 }

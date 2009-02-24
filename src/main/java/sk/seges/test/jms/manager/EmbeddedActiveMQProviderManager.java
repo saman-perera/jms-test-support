@@ -25,7 +25,7 @@ import org.springframework.context.ApplicationContext;
  * 
  * @author ladislav.gazo
  */
-public class EmbeddedActiveMQJMSProviderManager implements JMSProviderManager, BrokerServiceAware {
+public class EmbeddedActiveMQProviderManager implements JMSProviderManager, BrokerServiceAware {
 	private BrokerService broker;
 	private String brokerServiceFactoryName;
 	
@@ -67,4 +67,8 @@ public class EmbeddedActiveMQJMSProviderManager implements JMSProviderManager, B
 			throw new RuntimeException(e);
 		}
     }
+
+	public String getId() {
+		return "embeddedActiveMQ";
+	}
 }
