@@ -17,8 +17,12 @@ package sk.seges.test.jms;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.junit.internal.runners.InitializationError;
+import org.junit.runner.Description;
+import org.junit.runner.Result;
 import org.junit.runner.Runner;
+import org.junit.runner.notification.RunListener;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.Suite;
 
@@ -37,9 +41,12 @@ import sk.seges.test.jms.manager.JMSProviderManager;
  * @author ladislav.gazo
  */
 public abstract class JMSSuite extends Suite {
+	private static final Logger log = Logger.getLogger(JMSSuite.class);
 	protected List<JMSProviderManager> managers;
 
 	protected boolean restartAfterEachTest = false;
+	
+	private JMSProviderManager currentRunning = null;
 
 	public JMSSuite(Class<?> klass, Class<?>[] annotatedClasses)
 			throws InitializationError {
@@ -64,15 +71,67 @@ public abstract class JMSSuite extends Suite {
 	}
 
 	protected void runChildren(RunNotifier notifier) {
-		for (JMSProviderManager manager : managers) {
-			manager.start();
-			for (Runner each : getRunners()) {
-				each.run(notifier);
+		notifier.addListener(new RunListener() {
+			@Override
+			public void testFinished(Description description) throws Exception {
+				if(log.isDebugEnabled()) {
+					log.debug("FINISHING Test " + description.getDisplayName());
+				}
+				super.testFinished(description);
+				if(log.isDebugEnabled()) {
+					log.debug("FINISHED Test " + description.getDisplayName());
+				}
+
 				if (restartAfterEachTest) {
-					manager.restart();
+					currentRunning.restart();
+					if(log.isInfoEnabled()) {
+						log.info("RESTARTED Manager " + currentRunning);
+					}
 				}
 			}
+			
+			@Override
+			public void testStarted(Description description) throws Exception {
+				if(log.isDebugEnabled()) {
+					log.debug("STARTING Test " + description.getDisplayName());
+				}
+				super.testStarted(description);
+				if(log.isDebugEnabled()) {
+					log.debug("STARTED Test " + description.getDisplayName());
+				}
+			}
+			
+			@Override
+			public void testRunFinished(Result result) throws Exception {
+				super.testRunFinished(result);
+				if(log.isDebugEnabled()) {
+					log.debug("FINISHED Test run, count = " + result.getRunCount());
+				}
+			}
+			
+			@Override
+			public void testRunStarted(Description description)
+					throws Exception {
+				super.testRunStarted(description);
+				if(log.isDebugEnabled()) {
+					log.debug("STARTED Test run " + description.getDisplayName());
+				}
+			}
+		});
+		
+		for (JMSProviderManager manager : managers) {
+			manager.start();
+			currentRunning = manager;
+			if(log.isInfoEnabled()) {
+				log.info("STARTED Manager " + currentRunning);
+			}
+			for (Runner each : getRunners()) {
+				each.run(notifier);
+			}
 			manager.stop();
+			if(log.isInfoEnabled()) {
+				log.info("STOPPED Manager " + currentRunning);
+			}			
 		}
 	}
 

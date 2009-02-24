@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and 
  * limitations under the License. 
  */
-package sk.seges.test.jms;
+package sk.seges.test.jms.activemq;
 
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
-import javax.jms.JMSException;
+import javax.jms.DeliveryMode;
 import javax.jms.MessageProducer;
 import javax.jms.Queue;
 import javax.jms.Session;
@@ -25,28 +25,32 @@ import javax.jms.TextMessage;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
  * @author ladislav.gazo
  */
-public class SimpleOpenMQQueueSend {
-	private ConnectionFactory factory;
-	private Queue queue;
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {"classpath:/sk/seges/test/jms/activemq/test-activemq-context.xml"})
+public class SimpleActiveMQQueueSendTest {
+	@Autowired
+	private ConnectionFactory activeMQConnectionFactory;
+	@Autowired
+	private Queue activeMQTestQueueA;
 	
 	@Before
-	public void setUp() throws JMSException {
-//		factory = new com.sun.messaging.ConnectionFactory();
-//		com.sun.messaging.ConnectionFactory sunFactory = (com.sun.messaging.ConnectionFactory) factory;
-//		sunFactory.setProperty("imqAddressList", "mq://localhost:7676");
-//		
-//		queue = new com.sun.messaging.Queue("testQueue");
+	public void setUp() {
 	}
 	
 	@Test
 	public void testSend() throws Exception {
-		Connection connection = factory.createConnection();
+		Connection connection = activeMQConnectionFactory.createConnection();
 		Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-		MessageProducer producer = session.createProducer(queue);
+		MessageProducer producer = session.createProducer(activeMQTestQueueA);
+		producer.setDeliveryMode(DeliveryMode.PERSISTENT);
 		TextMessage message = session.createTextMessage("test text");
 		producer.send(message);
 		connection.close();
