@@ -13,18 +13,23 @@
  * See the License for the specific language governing permissions and 
  * limitations under the License. 
  */
-package sk.seges.test.jms;
+package sk.seges.test.jms.activemq;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite.SuiteClasses;
 import org.springframework.test.context.ContextConfiguration;
 
+import sk.seges.test.jms.ProviderConfiguration;
+import sk.seges.test.jms.SpringJMSSuite;
+import sk.seges.test.jms.SpringProviderConfiguration;
+
 /**
  * @author ladislav.gazo
  */
 @RunWith(SpringJMSSuite.class)
-@SuiteClasses({DummyFirstTest.class, DummySecondTest.class})
-@ContextConfiguration(locations = {"/sk/seges/test/jms/test-context.xml"})
-@SpringProviderConfiguration(managersListName = "jmsSuiteTestManagers")
-public class MockedSpringProvidersSuiteTest {
+@SuiteClasses({SimpleActiveMQQueueSendTest.class, SimpleActiveMQQueueReceiveFailTest.class})
+@ProviderConfiguration(restartAfterEachTest = true)
+@ContextConfiguration(locations = {"/sk/seges/test/jms/activemq/jts-context-activemq.xml"})
+@SpringProviderConfiguration(managersListName = "onlyEmbeddedActiveMQManager")
+public class EmbeddedActiveMQWithRestartsSuiteTest {
 }

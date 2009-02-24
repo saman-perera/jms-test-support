@@ -15,18 +15,56 @@
  */
 package sk.seges.test.jms.manager;
 
+import org.apache.activemq.broker.BrokerService;
+import org.apache.activemq.broker.BrokerServiceAware;
+import org.apache.activemq.xbean.XBeanBrokerService;
+import org.springframework.context.ApplicationContext;
+
 /**
  * Manager for an embedded ActiveMQ JMS provider.
  * 
  * @author ladislav.gazo
  */
-public class EmbeddedActiveMQJMSProviderManager implements JMSProviderManager {
-    public void start() {
+public class EmbeddedActiveMQJMSProviderManager implements JMSProviderManager, BrokerServiceAware {
+	private BrokerService broker;
+	private String brokerServiceFactoryName;
+	
+	public void setBrokerService(BrokerService broker) {
+		this.broker = broker;
+	}
+	
+	public void setBrokerServiceFactoryName(String brokerServiceFactoryName) {
+		this.brokerServiceFactoryName = brokerServiceFactoryName;
+	}
+
+	public void start() {
+    	try {
+			broker.start();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
     }
 
     public void stop() {
+    	try {
+			broker.stop();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
     }
 
     public void restart() {
+    	try {
+    		if(broker instanceof XBeanBrokerService) {
+    			ApplicationContext context = ((XBeanBrokerService) broker).getApplicationContext();
+    			broker.stop();
+    			if(brokerServiceFactoryName != null) {
+    				broker = (BrokerService) context.getBean(brokerServiceFactoryName);
+    			}
+    			broker.start();
+    		}
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
     }
 }
